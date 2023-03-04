@@ -1,0 +1,25 @@
+{
+  "name": "privacy-pools",
+  "main": "./lib/index.js",
+  "version": "0.1.1",
+  "repository": {
+      "type": "git",
+      "url": "git@github.com/ameensol/privacy-pools.git"
+  },
+  "dependencies": {
+    "@ethersproject/solidity": "^5.7.0",
+    "@nomiclabs/hardhat-ethers": "^2.1.1",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@openzeppelin/contracts": "^4.7.3",
+    "chai": "^4.3.6",
+    "chalk": "4.1.2",
+    "circomlib": "^2.0.5",
+    "circomlibjs": "^0.1.7",
+    "dotenv": "^16.0.2",
+    "fixed-merkle-tree": "^0.7.3",
+    "hardhat": "^2.11.1",
+    "mocha": "^10.0.0",
+    "vmtree-sdk": "vmtree/sdk#d2b1b91c24ec8a4e70058f9f2b0db0b9651ae948"
+  },
+  "devDependencies": {}
+}
