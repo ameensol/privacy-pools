@@ -158,9 +158,20 @@ $ cd privacy-pools
 $ yarn
 ```
 
+### Note: requires circom and snarkjs installed in your $PATH
+
+#### snarkjs
+```
+npm install -g snarkjs
+```
+
+#### circom
+see: https://docs.circom.io/getting-started/installation/
+
+
 ## Setup
 ```sh
-$ ./scripts/setup_withdraw_from_subset.sh
+$ ./scripts/setup.sh
 ```
 
 ## Test
