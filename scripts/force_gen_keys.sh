@@ -13,6 +13,7 @@ echo $TARGET circuit compiled!
 if [ -f "./powers_of_tau/powersOfTau28_hez_final_$TAU.ptau" ]; then
     echo powersOfTau28_hez_final_$TAU.ptau found!
 else
+    mkdir -p ./powers_of_tau
     wget https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_$TAU.ptau \
         -O ./powers_of_tau/powersOfTau28_hez_final_$TAU.ptau
 fi
