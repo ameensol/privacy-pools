@@ -8,6 +8,7 @@ if [ ! -f "./circuits/out/${TARGET}.r1cs" ] \
     || [ ! -f "./circuits/out/${TARGET}_js/${TARGET}.wasm" ] \
     || [ ! -f "./circuits/out/${TARGET}.sym" ]
 then
+    mkdir -p ./circuits/out
     circom ./circuits/$TARGET.circom \
 		-o=./circuits/out --r1cs --sym --wasm
     echo $TARGET circuit compiled!

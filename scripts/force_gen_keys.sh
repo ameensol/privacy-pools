@@ -4,6 +4,8 @@ TARGET=$1
 TAU=$2
 NUM_PUBLIC_INPUTS=$3
 
+mkdir -p ./circuits/out
+
 circom ./circuits/$TARGET.circom \
     -o=./circuits/out --r1cs --sym --wasm
 echo $TARGET circuit compiled!
