@@ -1,5 +1,5 @@
 # Privacy Pools with Opt-in or Opt-out Anonymity Sets
-This is an attempt at a non-custodial, non-restrictive mixer that allows withdrawals to positively associate with arbitrary subsets of deposits. Users can voluntarily remove themselves from an anonymity set containing stolen or laundered funds, and this is done completely in zero knowledge without sacrificing the privacy of the user.
+This is an attempt at a non-custodial, non-restrictive privacy protocol that allows withdrawals to positively associate with arbitrary subsets of deposits. Users can voluntarily remove themselves from an anonymity set containing stolen or laundered funds, and this is done completely in zero knowledge without sacrificing the privacy of the user.
 
 **This design aims to be a crypto-native solution that allows the community to defend against hackers abusing the anonymity sets of honest users without requiring blanket regulation or sacrificing on crypto ideals.**
 
@@ -13,7 +13,7 @@ Features:
  - Subsets are efficiently represented as a subset merkle root (1 evm word).
  - Subset merkle roots are provided in calldata at the time of withdrawal and validated in the zero knowledge proof, and there are no restrictions on which subset roots can be chosen.
     - It shouldn't be possible to provide an invalid subset root, but even if it was possible, that withdrawal would simply be untrusted by default, because it wouldn't be possible to verify which subset of deposits is represented by a nonsensical root.
- - There's almost no overhead added compared to the minimal mixer design.
+ - There's almost no overhead added compared to the minimal design.
  - Funds cannot be locked in the contract, censored, or stolen based on any opinionated list.
  - Over time as communities curate deposit lists, the anonymity set for hackers actually shrinks to include only those bad deposits, **naturally hindering even the possibility of money laundering to occur**.
 
@@ -26,7 +26,7 @@ The fact that every withdrawal must associate with a subset in the deposits tree
 
 [Paraphrasing from his description in a recent podcast](https://www.youtube.com/clip/Ugkx7LeQPvONM0OFOfAUazyjf0JSj_9y7Tqw), we want to do this *one simple thing*:
 
-> **One simple thing that you can do is you can create a tornado cash like mixer where when you withdraw, in addition to just making a zero knowledge proof that proves that you have a valid deposit and that your valid deposit wasn't spent yet, you could also make a zero knowledge proof that says that this withdrawal is not part of one of this subset of deposits or this withdrawal is part of one of this subset of deposits.**
+> **One simple thing that you can do is you can create a tornado cash like thing where when you withdraw, in addition to just making a zero knowledge proof that proves that you have a valid deposit and that your valid deposit wasn't spent yet, you could also make a zero knowledge proof that says that this withdrawal is not part of one of this subset of deposits or this withdrawal is part of one of this subset of deposits.**
 
 ## Description
 
@@ -88,62 +88,6 @@ In the ideal case, the community will natively defend itself against blackhat ac
 
 One way to facilitate the decentralized curation of the subsets is to use subset root values as token ids of NFTs. The metadata of the NFTs can point to a block number where the subset bitstring representation and tree type of the list is emitted in a transaction’s calldata. A dao or multisig can mint NFTs of curated subsets, and the user can reconstruct the tree for use in their merkle proofs using entirely on-chain data by browsing a catalogue of community-curated lists represented nicely as an NFT gallery.
 
-## ZK Scheme
-See [withdraw_from_subset.circom](./circuits/withdraw_from_subset.circom) for the circom implementation of this scheme. I'm not the best with math notation so it might make more sense to read the actual circom file.
-### **Definitions**
-
-$$
-\begin{aligned}
-\psi &= \text{poseidon hash function}\\
-\kappa_q &= \text{keccak256 hash function, mod q if necessary}\\
-R_{C'} &= \text{Merkle root of all deposits}\\
-M_{C'} &= \text{array of elements that form a merkle proof in }R_{C'}\\
-R_a &= \text{merkle root of some subset of }R_{C'}\\
-M_a &= \text{array of elements that form a merkle proof in }R_a\\
-A &= \text{asset public metadata: }\kappa_q(\text{token, denomination})\\
-W &= \text{withdraw public metadata: }\kappa_q(\text{recipient, relayer, fee})\\
-E &= \text{expected value in the subset: }\kappa_q(\text{"allowed"})\\
-s&= \text{crytographically secure random value}\\
-C &= \text{raw commitment: }\psi(s)\\
-C' &= \text{stamped commitment: }\psi(C, A)\\
-C'_i &= \text{$i$-th commitment in } R_{C'}\\
-N_i &= \text{nullifier for $C'_i$: }\psi(s, 1, i)\\
-\end{aligned}
-$$
-
-### **Prove**
-
-$$
-\begin{aligned}
-C &= \psi(s)\\
-C' &= \psi(C, A)\\
-N_i &= \psi(s, 1, i)\\
-R_{C'} &= \text{VerifyMerkleProof}(C', i, M_{C'})\\
-R_{a} &= \text{VerifyMerkleProof}(E, i, M_a)\\
-W^2 &= W \cdot W
-\end{aligned}
-$$
-
-**Private Inputs**
-1. $s$
-2. $i$
-3. $M_{C'}$
-4. $M_a$
-
-**Public Inputs**
-
-1. $R_{C'}$
-2. $R_a$
-3. $N_i$
-4. $A$
-5. $W$
-
-# To Do
-1. Verify that this design does what it claims to do.
-2. Solidity implementation & unit tests
-3. Subset compression and decompression algorithms
-4. Contracts/library for posting/retrieving data on-chain
-5. Interface and testnet deployment
 
 # Test Locally
 I wrote the circom circuit and several basic unit tests to compute a withdrawal with an additional subset membership proof. You can compile and test it locally on your own machine by running the following commands.
