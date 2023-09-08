@@ -8,6 +8,7 @@ if [ ! -f "./circuits/out/${TARGET}.r1cs" ] \
     || [ ! -f "./circuits/out/${TARGET}_js/${TARGET}.wasm" ] \
     || [ ! -f "./circuits/out/${TARGET}.sym" ]
 then
+    mkdir -p ./circuits/out
     circom ./circuits/$TARGET.circom \
 		-o=./circuits/out --r1cs --sym --wasm
     echo $TARGET circuit compiled!
@@ -18,6 +19,7 @@ fi
 if [ -f "./powers_of_tau/powersOfTau28_hez_final_$TAU.ptau" ]; then
     echo powersOfTau28_hez_final_$TAU.ptau found!
 else
+    mkdir -p ./powers_of_tau
     wget https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_$TAU.ptau \
         -O ./powers_of_tau/powersOfTau28_hez_final_$TAU.ptau
 fi

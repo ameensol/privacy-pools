@@ -4,6 +4,8 @@ TARGET=$1
 TAU=$2
 NUM_PUBLIC_INPUTS=$3
 
+mkdir -p ./circuits/out
+
 circom ./circuits/$TARGET.circom \
     -o=./circuits/out --r1cs --sym --wasm
 echo $TARGET circuit compiled!
@@ -11,6 +13,7 @@ echo $TARGET circuit compiled!
 if [ -f "./powers_of_tau/powersOfTau28_hez_final_$TAU.ptau" ]; then
     echo powersOfTau28_hez_final_$TAU.ptau found!
 else
+    mkdir -p ./powers_of_tau
     wget https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_$TAU.ptau \
         -O ./powers_of_tau/powersOfTau28_hez_final_$TAU.ptau
 fi
